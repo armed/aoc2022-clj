@@ -1,13 +1,15 @@
 (ns day4
   (:require
+   [util :refer [->Result]]
    [clojure.java.io :as io]
    [clojure.string :as string]))
 
-(def input (slurp (io/resource "day4")))
-
-(def data (->> (string/split input #"\D")
-               (map parse-long)
-               (partition-all 4)))
+(defn input []
+  (let [in (->> (io/resource "day4")
+                (slurp))]
+    (->> (string/split in #"\D")
+         (map parse-long)
+         (partition-all 4))))
 
 (defn full-overlap?
   [[a1 b1 a2 b2]]
@@ -34,8 +36,6 @@
           0
           in))
 
-(def first-part (count-overlaps data full-overlap?))
-
 (defn partial-overlap?
   [[a1 b1 a2 b2]]
   (or (<= a1 a2 b1)
@@ -43,5 +43,9 @@
       (<= a2 a1 b2)
       (<= a2 b1 b2)))
 
-(def second-part (count-overlaps data partial-overlap?))
+(defn run []
+  (let [in (input)]
+    (->Result (count-overlaps in full-overlap?)
+              (count-overlaps in partial-overlap?))))
 
+(comment (time (run)))

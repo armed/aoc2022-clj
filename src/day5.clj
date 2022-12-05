@@ -1,11 +1,13 @@
 (ns day5
   (:require
+   [util :refer [->Result]]
    [clojure.java.io :as io]
    [clojure.string :as string]))
 
-(def input (-> (io/resource "day5")
-               (slurp)
-               (string/split-lines)))
+(defn input []
+  (-> (io/resource "day5")
+      (slurp)
+      (string/split-lines)))
 
 (defn- line->crates
   [line]
@@ -41,13 +43,13 @@
         cmds (parse-commands input)]
     (reduce (fn [crates [amount from to]]
               (let [from-stack (nth crates from)
-                    crate-pack (take amount (reverse from-stack))
+                    crate-pack (take-last amount from-stack)
                     crate-pack' (if first-part?
-                                  crate-pack
-                                  (reverse crate-pack))]
+                                  (reverse crate-pack)
+                                  crate-pack)]
                 (-> crates
-                    (update to into crate-pack')
-                    (update from (comp vec (partial drop-last amount))))))
+                    (update to concat crate-pack')
+                    (update from (partial drop-last amount)))))
             crates
             cmds)))
 
@@ -64,10 +66,11 @@
 
   (calc-top-crates test-input true)
   (calc-top-crates test-input false)
-  
+
   nil)
 
-;; first part
-(calc-top-crates input true)
-;; second part
-(calc-top-crates input false)
+(defn run []
+  (let [in (input)]
+    (->Result (calc-top-crates in true) (calc-top-crates in false))))
+
+(comment (time (run)))

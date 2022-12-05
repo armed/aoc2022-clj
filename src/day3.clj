@@ -1,12 +1,15 @@
 (ns day3
   (:require
+   [util :refer [->Result]]
    [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.string :as string]))
 
-(def input (-> (io/resource "day3")
-               (slurp)
-               (string/split-lines)))
+(defn input
+  []
+  (-> (io/resource "day3")
+      (slurp)
+      (string/split-lines)))
 
 (def item-priorities (->> (concat (range (int \a) (inc (int \z)))
                                   (range (int \A) (inc (int \Z))))
@@ -35,9 +38,6 @@
        (map sum)
        (reduce +)))
 
-(comment
-  (first-part input))
-
 (defn badge
   [group]
   (apply set/intersection group))
@@ -51,6 +51,8 @@
        (map first)
        (sum)))
 
-(comment
-  (second-part input))
+(defn run []
+  (let [in (input)]
+    (->Result (first-part in) (second-part in))))
 
+(comment (time (run)))

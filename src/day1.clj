@@ -1,9 +1,10 @@
 (ns day1
   (:require
    [clojure.string :as string]
+   [util :refer [->Result]]
    [clojure.java.io :as io]))
 
-(def elves-snacks
+(defn input []
   (->> (slurp (io/resource "day1"))
        (string/split-lines)
        (map (fn [s] (if (empty? s) 0 (parse-long s))))
@@ -12,6 +13,8 @@
        (sort)
        (reverse)))
 
-(def first-part (first elves-snacks))
+(defn run []
+  (let [in (input)]
+    (->Result (first in) (reduce + (take 3 in)))))
 
-(def second-part (reduce + (take 3 elves-snacks)))
+(comment (time (run)))
