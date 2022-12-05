@@ -1,3 +1,3 @@
 (ns util)
 
-(defrecord Result [first second])
+(defrecord Result [part1 part2])
