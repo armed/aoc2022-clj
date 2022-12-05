@@ -10,9 +10,7 @@
 (defn- line->crates
   [line]
   (->> (partition-all 4 line)
-       (map string/join)
-       (map string/trim)
-       (map second)))
+       (map (comp second string/trim string/join))))
 
 (defn parse-crates
   [input]
