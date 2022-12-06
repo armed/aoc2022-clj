@@ -7,19 +7,33 @@
   (-> (io/resource "day6")
       (slurp)))
 
+(defn least-dupe-idx
+  [letters]
+  (reduce (fn [idx [i j]]
+            (let [l1 (nth letters i)
+                  l2 (nth letters j)]
+              (if (= l1 l2)
+                (reduced (inc i))
+                idx)))
+          nil
+          (for [i (range (dec (count letters)))
+                j (range 1 (count letters))
+                :when (< i j)]
+            [i j])))
+
 (defn find-distinct-distance
   [in len]
-  (let [parts (partition len 1 in)]
-    (reduce (fn [idx part]
-              (if (= len (count (set part)))
-                (reduced (+ idx len))
-                (inc idx)))
-            0
-            parts)))
+  (let [letters (vec in)]
+    (loop [offset 0]
+      (let [part (subvec letters offset (+ offset len))]
+        (if-let [dupe-idx (least-dupe-idx part)]
+          (let [new-offset (+ offset dupe-idx)]
+            (recur new-offset))
+          (+ len offset))))))
 
 (comment
-  (vec "bvwbjplbgvbhsrlpgdmjqwftvncz")
   (find-distinct-distance (input) 4)
+
   (find-distinct-distance "bvwbjplbgvbhsrlpgdmjqwftvncz" 4)
   (find-distinct-distance "nppdvjthqldpwncqszvftbrmjlhg" 4)
   (find-distinct-distance "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg" 4)
