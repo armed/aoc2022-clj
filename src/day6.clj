@@ -9,24 +9,16 @@
 
 (defn find-distinct-distance
   [in len]
-  (reduce (fn [acc c]
-            (let [stack (conj acc c)
-                  cnt (count stack)]
-              (cond
-                (< cnt len) stack
-
-                (-> stack
-                    (subvec (- cnt len))
-                    (distinct)
-                    (count)
-                    (= len))
-                (reduced cnt)
-
-                :else stack)))
-          []
-          in))
+  (let [parts (partition len 1 in)]
+    (reduce (fn [idx part]
+              (if (= len (count (set part)))
+                (reduced (+ idx len))
+                (inc idx)))
+            0
+            parts)))
 
 (comment
+  (vec "bvwbjplbgvbhsrlpgdmjqwftvncz")
   (find-distinct-distance (input) 4)
   (find-distinct-distance "bvwbjplbgvbhsrlpgdmjqwftvncz" 4)
   (find-distinct-distance "nppdvjthqldpwncqszvftbrmjlhg" 4)
