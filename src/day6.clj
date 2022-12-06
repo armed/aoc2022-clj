@@ -8,14 +8,21 @@
       (slurp)))
 
 (defn find-distinct-distance
-  [in amount]
+  [in len]
   (reduce (fn [acc c]
             (let [stack (conj acc c)
-                  cnt (count stack)
-                  tail (subvec stack (min cnt (abs (- cnt amount))))]
-              (if (= amount (count (distinct tail)))
-                (reduced (count stack))
-                stack)))
+                  cnt (count stack)]
+              (cond
+                (< cnt len) stack
+
+                (-> stack
+                    (subvec (- cnt len))
+                    (distinct)
+                    (count)
+                    (= len))
+                (reduced cnt)
+
+                :else stack)))
           []
           in))
 
