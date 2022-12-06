@@ -25,13 +25,12 @@
   (find-distinct-distance "nppdvjthqldpwncqszvftbrmjlhg" 4)
   (find-distinct-distance "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg" 4)
   (find-distinct-distance "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" 4)
-  
+
   (find-distinct-distance "mjqjpqmgbljsphdztnvjfqwrcgsmlb" 14)
   (find-distinct-distance "bvwbjplbgvbhsrlpgdmjqwftvncz" 14)
   (find-distinct-distance "nppdvjthqldpwncqszvftbrmjlhg" 14)
   (find-distinct-distance "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg" 14)
-  (find-distinct-distance "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" 14)
-  )
+  (find-distinct-distance "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" 14))
 
 (defn first-part
   [in]
