@@ -19,7 +19,6 @@
           []
           in))
 
-(subvec (persistent! (transient [1 2 3])) 1)
 (comment
   (find-distinct-distance (input) 4)
   (find-distinct-distance "bvwbjplbgvbhsrlpgdmjqwftvncz" 4)
