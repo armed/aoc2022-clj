@@ -1,1 +1,3 @@
-{:paths ["src" "resources"]}
+{:paths ["src" "resources"]
+ :aliases {:bb {:extra-deps {babashka/fs {:mvn/version "0.1.11"}}
+                :extra-paths ["scripts"]}}}
