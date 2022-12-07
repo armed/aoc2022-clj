@@ -25,7 +25,7 @@
   [{:keys [path] :as ctx} file]
   (let [size (parse-long (re-find #"\d+" file))]
     (update ctx :dir-sizes (fn [dsx]
-                             (loop [p (iterate butlast path)
+                             (loop [p (iterate #(and (seq %) (pop %)) path)
                                     dsx dsx]
                                (if-let [path (first p)]
                                  (recur (rest p)
@@ -34,20 +34,20 @@
 
 (defn parse
   [in]
-  (:dir-sizes
-   (reduce (fn [ctx line]
-             (cond
-               (= line "$ cd ..") (update ctx :path pop)
+  (->> (drop 2 in)
+       (reduce (fn [ctx line]
+                 (cond
+                   (= line "$ cd ..") (update ctx :path pop)
 
-               (string/starts-with? line "$ cd") (cd ctx line)
+                   (string/starts-with? line "$ cd") (cd ctx line)
 
-               (or (string/starts-with? line "$ ls")
-                   (string/starts-with? line "dir")) ctx
+                   (or (string/starts-with? line "$ ls")
+                       (string/starts-with? line "dir")) ctx
 
-               :else (add-file ctx line)))
-           {:path ["/"]
-            :dir-sizes {}}
-           (drop 2 in))))
+                   :else (add-file ctx line)))
+               {:path ["/"]
+                :dir-sizes {}})
+       :dir-sizes))
 
 (defn first-part
   [in]
