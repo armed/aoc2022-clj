@@ -16,11 +16,6 @@
       (slurp)
       (string/split-lines)))
 
-(defn cd
-  [ctx cmd]
-  (let [[_ _ dir] (string/split cmd #" ")]
-    (update ctx :path conj dir)))
-
 (defn add-file
   [{:keys [path] :as ctx} file]
   (let [size (parse-long (re-find #"\d+" file))]
@@ -29,7 +24,7 @@
                                     dsx dsx]
                                (if-let [path (first p)]
                                  (recur (rest p)
-                                        (update dsx path #(+ size (or % 0))))
+                                        (update dsx path (fnil + 0) size))
                                  dsx))))))
 
 (defn parse
@@ -37,12 +32,15 @@
   (->> (drop 2 in)
        (reduce (fn [ctx line]
                  (cond
-                   (= line "$ cd ..") (update ctx :path pop)
+                   (= line "$ cd ..")
+                   (update ctx :path pop)
 
-                   (string/starts-with? line "$ cd") (cd ctx line)
+                   (string/starts-with? line "$ cd")
+                   (update ctx :path conj (subs line 5))
 
                    (or (string/starts-with? line "$ ls")
-                       (string/starts-with? line "dir")) ctx
+                       (string/starts-with? line "dir"))
+                   ctx
 
                    :else (add-file ctx line)))
                {:path ["/"]
