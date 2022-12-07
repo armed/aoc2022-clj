@@ -61,7 +61,7 @@
         sizes (parse in)
         taken-space (get sizes ["/"])
         required-min (- desired-space (- total-space taken-space))]
-    (apply min (sort (filter #(<= required-min %) (vals sizes))))))
+    (apply min (filter #(<= required-min %) (vals sizes)))))
 
 (comment
   (parse (test-input)))
