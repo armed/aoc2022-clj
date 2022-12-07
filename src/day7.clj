@@ -1,0 +1,76 @@
+(ns day7
+  (:require
+   [clojure.java.io :as io]
+   [clojure.string :as string]
+   [util :refer [->Result]]))
+
+(defn input
+  []
+  (-> (io/resource "day7")
+      (slurp)
+      (string/split-lines)))
+
+(defn test-input
+  []
+  (-> (io/resource "day7test")
+      (slurp)
+      (string/split-lines)))
+
+(defn cd
+  [ctx cmd]
+  (let [[_ _ dir] (string/split cmd #" ")]
+    (update ctx :path conj dir)))
+
+(defn add-file
+  [{:keys [path] :as ctx} file]
+  (let [size (parse-long (re-find #"\d+" file))]
+    (update ctx :dir-sizes (fn [dsx]
+                             (loop [p (iterate butlast path)
+                                    dsx dsx]
+                               (if-let [path (first p)]
+                                 (recur (rest p)
+                                        (update dsx path #(+ size (or % 0))))
+                                 dsx))))))
+
+(defn parse
+  [in]
+  (:dir-sizes
+   (reduce (fn [ctx line]
+             (cond
+               (= line "$ cd ..") (update ctx :path pop)
+
+               (string/starts-with? line "$ cd") (cd ctx line)
+
+               (or (string/starts-with? line "$ ls")
+                   (string/starts-with? line "dir")) ctx
+
+               :else (add-file ctx line)))
+           {:path ["/"]
+            :dir-sizes {}}
+           (drop 2 in))))
+
+(defn first-part
+  [in]
+  (->> (parse in)
+       (vals)
+       (filter (fn [size] (<= size 100000)))
+       (reduce +)))
+
+(defn second-part
+  [in]
+  (let [desired-space 30000000
+        total-space 70000000
+        sizes (parse in)
+        taken-space (get sizes ["/"])
+        required-min (- desired-space (- total-space taken-space))]
+    (apply min (sort (filter #(<= required-min %) (vals sizes))))))
+
+(comment
+  (parse (test-input)))
+
+(defn run []
+  (let [in (input)]
+    (->Result (first-part in) (second-part in))))
+
+(comment (time (run)))
+

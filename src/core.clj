@@ -5,7 +5,8 @@
    [day3]
    [day4]
    [day5]
-   [day6]))
+   [day6]
+   [day7]))
 
 (time
  (mapv deref
@@ -14,4 +15,5 @@
         (future (day3/run))
         (future (day4/run))
         (future (day5/run))
-        (future (day6/run))]))
+        (future (day6/run))
+        (future (day7/run))]))
