@@ -1,3 +1,4 @@
 {:paths ["src" "resources"]
+ :deps {com.taoensso/tufte {:mvn/version "2.4.5"}}
  :aliases {:bb {:extra-deps {babashka/fs {:mvn/version "0.1.11"}}
                 :extra-paths ["scripts"]}}}

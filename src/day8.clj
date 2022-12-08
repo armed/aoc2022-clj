@@ -61,8 +61,8 @@
 (defn scenic
   [coords trees trans]
   (let [[tree left right top bottom] (tree-data coords trees trans)]
-    (* (side-scenic (reverse left) tree)
-       (side-scenic (reverse top) tree)
+    (* (side-scenic (rseq left) tree)
+       (side-scenic (rseq top) tree)
        (side-scenic right tree)
        (side-scenic bottom tree))))
 
