@@ -1,13 +1,11 @@
 (ns day5
   (:require
-   [util :refer [->Result]]
-   [clojure.java.io :as io]
+   [util :as u]
    [clojure.string :as string]))
 
-(defn input []
-  (-> (io/resource "day5")
-      (slurp)
-      (string/split-lines)))
+(comment
+  (def input (u/load-input "day5"))
+  (def test-input (u/load-input "day5test")))
 
 (defn- line->crates
   [line]
@@ -37,40 +35,34 @@
        (rest)
        (map (comp parse-longs (partial re-seq #"\d+")))))
 
+(defn parse
+  [input]
+  [(parse-crates input) (parse-commands input)])
+
 (defn move-crates
-  [input first-part?]
-  (let [crates (parse-crates input)
-        cmds (parse-commands input)]
-    (reduce (fn [crates [amount from to]]
-              (let [from-stack (nth crates from)
-                    crate-pack (take-last amount from-stack)
-                    crate-pack' (if first-part?
-                                  (reverse crate-pack)
-                                  crate-pack)]
-                (-> crates
-                    (update to concat crate-pack')
-                    (update from (partial drop-last amount)))))
-            crates
-            cmds)))
+  [first-part? [crates cmds]]
+  (reduce (fn [crates [amount from to]]
+            (let [from-stack (nth crates from)
+                  crate-pack (take-last amount from-stack)
+                  crate-pack' (if first-part?
+                                (reverse crate-pack)
+                                crate-pack)]
+              (-> crates
+                  (update to concat crate-pack')
+                  (update from (partial drop-last amount)))))
+          crates
+          cmds))
 
 (defn calc-top-crates
-  [input first-part?]
-  (->> (move-crates input first-part?)
+  [first-part? parsed-input]
+  (->> (move-crates first-part? parsed-input)
        (map last)
        (apply str)))
 
-(comment
-  (def test-input (-> (io/resource "day5test")
-                      (slurp)
-                      (string/split-lines)))
-
-  (calc-top-crates test-input true)
-  (calc-top-crates test-input false)
-
-  nil)
-
-(defn run []
-  (let [in (input)]
-    (->Result (calc-top-crates in true) (calc-top-crates in false))))
+(defn run
+  []
+  (u/run "day5" parse
+         (partial calc-top-crates true)
+         (partial calc-top-crates false)))
 
 (comment (time (run)))

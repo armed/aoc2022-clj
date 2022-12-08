@@ -1,5 +1,5 @@
 (ns day6
-  (:require [util :refer [->Result]]
+  (:require [util :as u]
             [clojure.java.io :as io]))
 
 (defn input
@@ -54,8 +54,7 @@
   (find-distinct-distance in 14))
 
 (defn run []
-  (let [in (input)]
-    (->Result (first-part in) (second-part in))))
+  (u/run-input (input) first-part second-part))
 
 (comment (time (run)))
 

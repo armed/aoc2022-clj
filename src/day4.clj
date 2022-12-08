@@ -1,6 +1,6 @@
 (ns day4
   (:require
-   [util :refer [->Result]]
+   [util :as u]
    [clojure.java.io :as io]
    [clojure.string :as string]))
 
@@ -28,7 +28,7 @@
   nil)
 
 (defn count-overlaps
-  [in overlap-fn]
+  [overlap-fn in]
   (reduce (fn [c pair]
             (if (overlap-fn pair)
               (inc c)
@@ -43,9 +43,10 @@
       (<= a2 a1 b2)
       (<= a2 b1 b2)))
 
-(defn run []
-  (let [in (input)]
-    (->Result (count-overlaps in full-overlap?)
-              (count-overlaps in partial-overlap?))))
+(defn run
+  []
+  (u/run-input (input)
+               (partial count-overlaps full-overlap?)
+               (partial count-overlaps partial-overlap?)))
 
 (comment (time (run)))

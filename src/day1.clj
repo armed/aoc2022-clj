@@ -1,7 +1,7 @@
 (ns day1
   (:require
    [clojure.string :as string]
-   [util :refer [->Result]]
+   [util :as u]
    [clojure.java.io :as io]))
 
 (defn input []
@@ -13,8 +13,14 @@
        (sort)
        (reverse)))
 
-(defn run []
-  (let [in (input)]
-    (->Result (first in) (reduce + (take 3 in)))))
+(def first-part first)
+
+(defn second-part 
+  [in]
+  (reduce + (take 3 in)))
+
+(defn run
+  []
+  (u/run-input (input) first-part second-part))
 
 (comment (time (run)))

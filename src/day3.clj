@@ -1,15 +1,7 @@
 (ns day3
   (:require
-   [util :refer [->Result]]
-   [clojure.java.io :as io]
-   [clojure.set :as set]
-   [clojure.string :as string]))
-
-(defn input
-  []
-  (-> (io/resource "day3")
-      (slurp)
-      (string/split-lines)))
+   [util :as u]
+   [clojure.set :as set]))
 
 (def item-priorities (->> (concat (range (int \a) (inc (int \z)))
                                   (range (int \A) (inc (int \Z))))
@@ -51,8 +43,8 @@
        (map first)
        (sum)))
 
-(defn run []
-  (let [in (input)]
-    (->Result (first-part in) (second-part in))))
+(defn run
+  []
+  (u/run "day3" nil first-part second-part))
 
 (comment (time (run)))

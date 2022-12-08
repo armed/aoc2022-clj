@@ -1,7 +1,7 @@
 (ns day2
   (:require
    [clojure.java.io :as io]
-   [util :refer [->Result]]
+   [util :as u]
    [clojure.string :as string]))
 
 (def rules-1 {:X 1 :A 1
@@ -42,8 +42,10 @@
         shapes (get rules-2 him)]
     (+ acc sum (nth shapes shape))))
 
-(defn run []
-  (let [in (input)]
-    (->Result (reduce play 0 in) (reduce play-2 0 in))))
+(defn run
+  []
+  (u/run-input (input)
+               (partial reduce play 0)
+               (partial reduce play-2 0)))
 
 (comment (time (run)))

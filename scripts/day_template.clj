@@ -1,19 +1,11 @@
 (ns day_template
-  (:require [clojure.string :as string]
-            [util :refer [->Result]]
-            [clojure.java.io :as io]))
+  (:require
+   [util :as u]))
 
-(defn input 
-  []
-  (-> (io/resource "day_template")
-      (slurp)
-      (string/split-lines)))
-
-(defn test-input
-  []
-  (-> (io/resource "day_templatetest")
-      (slurp)
-      (string/split-lines)))
+(comment
+  (def input (u/load-input "day_template"))
+  (def test-input (u/load-input "day_templatetest"))
+  )
 
 (defn parse-input
   [in]
@@ -21,18 +13,21 @@
   )
 
 (defn first-part
-  [in]
+  [parsed-in]
   ;; impl
   )
 
 (defn second-part
-  [in]
+  [parsed-in]
   ;; impl
   )
 
-(defn run []
-  (let [in (input)]
-    (->Result (first-part in) (second-part in))))
+(defn run
+  []
+  (u/run "day_template" parse-input first-part second-part))
 
-(comment (time (run)))
+(comment 
+  (time (run))
+  (time (u/run "day_templatetest" parse-input first-part second-part))
+  nil)
 

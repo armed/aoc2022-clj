@@ -1,20 +1,11 @@
 (ns day7
   (:require
-   [clojure.java.io :as io]
    [clojure.string :as string]
-   [util :refer [->Result]]))
+   [util :as u]))
 
-(defn input
-  []
-  (-> (io/resource "day7")
-      (slurp)
-      (string/split-lines)))
-
-(defn test-input
-  []
-  (-> (io/resource "day7test")
-      (slurp)
-      (string/split-lines)))
+(comment
+  (def input (u/load-input "day7"))
+  (def test-input (u/load-input "day7test")))
 
 (defn add-file
   [{:keys [path] :as ctx} file]
@@ -48,27 +39,21 @@
        :dir-sizes))
 
 (defn first-part
-  [in]
-  (->> (parse in)
-       (vals)
+  [sizes]
+  (->> (vals sizes)
        (filter (fn [size] (<= size 100000)))
        (reduce +)))
 
 (defn second-part
-  [in]
+  [sizes]
   (let [desired-space 30000000
         total-space 70000000
-        sizes (parse in)
         taken-space (get sizes ["/"])
         required-min (- desired-space (- total-space taken-space))]
     (apply min (filter #(<= required-min %) (vals sizes)))))
 
-(comment
-  (parse (test-input)))
-
 (defn run []
-  (let [in (input)]
-    (->Result (first-part in) (second-part in))))
+  (u/run "day7" parse first-part second-part))
 
 (comment (time (run)))
 
