@@ -4,6 +4,13 @@
    [util :as u]
    [clojure.string :as string]))
 
+(defn input []
+  (->> (slurp (io/resource "day2"))
+       (string/split-lines)
+       (map (fn [[him _ me]]
+              [(keyword (str him))
+               (keyword (str me))]))))
+
 (def rules-1 {:X 1 :A 1
               :Y 2 :B 2
               :Z 3 :C 3})
@@ -21,13 +28,6 @@
   (let [[him' me'] [(get rules-1 him) (get rules-1 me)]
         state (get states (- him' me'))]
     (+ acc (+ state me'))))
-
-(defn input []
-  (->> (slurp (io/resource "day2"))
-       (string/split-lines)
-       (map (fn [[him _ me]]
-              [(keyword (str him))
-               (keyword (str me))]))))
 
 (def rules-2 {:A [3 1 2]
               :B [1 2 3]
