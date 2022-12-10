@@ -23,17 +23,30 @@
                [[] 1])
        (first)))
 
+(defn sum-parts
+  []
+  (fn [rf]
+    (let [prev (volatile! 0)]
+      (fn
+        ([] (rf))
+        ([result] (rf result))
+        ([result input]
+         (let [new-sum (+ @prev (apply + input))]
+           (vreset! prev new-sum)
+           (rf result new-sum)))))))
+
 (defn first-part
   [parsed-in]
-  (->> parsed-in
-       (partition-all 20)
-       (reduce (fn [sums part]
-                 (conj sums (+ (or (last sums) 0) (apply + part))))
-               [])
-       (map-indexed (fn [i v] [(* 20 (inc i)) v]))
-       (take-nth 2)
-       (map (partial apply *))
-       (apply +)))
+  (transduce
+   (comp
+    (partition-all 20)
+    (sum-parts)
+    (map-indexed (fn [i v]
+                   [(* 20 (inc i)) v]))
+    (take-nth 2)
+    (map (partial apply *)))
+   +
+   parsed-in))
 
 (defn second-part
   [parsed-in]
