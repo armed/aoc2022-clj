@@ -25,7 +25,6 @@
     (try-create-file! infile)
     (try-create-file! testinfile)))
 
-
 (comment
   (create-day 6))
 

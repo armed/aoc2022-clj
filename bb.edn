@@ -1,2 +1,3 @@
-{:paths ["scripts"]
- :tasks {day main/create-day}}
+{:paths ["scripts" "src" "resources"]
+ :tasks {day main/create-day
+         run-all core/-main}}

@@ -62,7 +62,8 @@
         (if (>= 1 (abs (- new-idx new-place)))
           (print "█")
           (print "•"))
-        (recur new-place (inc new-idx) (rest opers))))))
+        (recur new-place (inc new-idx) (rest opers)))))
+  (println))
 
 (comment
   (first-part (parse-input test-input))
