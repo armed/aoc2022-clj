@@ -47,40 +47,39 @@
   (into [] (comp (partition-all 7) (map parse-monkey)) in))
 
 (defn round
-  [first-part? lcd monkeys]
+  [first-part? lcd monkeys rounds]
   (persistent!
    (reduce (fn [monkeys idx]
              (let [{:keys [items oper-fn test throw-to inspects] :as monkey}
                    (nth monkeys idx)]
-               (loop [items items
-                      inspects' 0
+               (loop [remain-items items
                       monkeys monkeys]
-                 (if (seq items)
-                   (let [item (first items)
+                 (if (seq remain-items)
+                   (let [item (first remain-items)
                          i (oper-fn item first-part?)
                          test-result (test i)
                          to (get throw-to (zero? test-result))
-                         send-val (if (and (not first-part?) (> i lcd))
-                                    (+ lcd (rem i lcd))
+                         send-val (if (not first-part?)
+                                    (rem i lcd)
                                     i)
                          to-monkey (nth monkeys to)]
-                     (recur (subvec items 1)
-                            (inc inspects')
+                     (recur (subvec remain-items 1)
                             (assoc! 
                               monkeys to (update to-monkey :items conj send-val))))
                    (assoc!
                     monkeys
                     idx (assoc monkey
                                :items []
-                               :inspects (+ inspects inspects')))))))
+                               :inspects (+ inspects (count items))))))))
            (transient monkeys)
-           (range (count monkeys)))))
+           (take (* (count monkeys) rounds)
+                 (cycle (range (count monkeys)))))))
 
 (defn monkey-business-level
   [first-part? monkeys]
   (let [lcd (apply * (map :div-by monkeys))
-        iter (iterate (partial round first-part? lcd) monkeys)]
-    (->> (nth iter (if first-part? 20 10000))
+        result (round first-part? lcd monkeys (if first-part? 20 10000))]
+    (->> result
          (sort-by :inspects >)
          (map :inspects)
          (take 2)
@@ -100,7 +99,11 @@
          (partial monkey-business-level true)
          (partial monkey-business-level false)))
 
+(take (* 4 10) (cycle [1 2 3 4]))
+
 (comment
+  (time (monkey-business-level false (parse-input input)))
+  (time (monkey-business-level true (parse-input input)))
   ; {:part1 50616, :part2 11309046332}
   (time (run))
   ; {:part1 10605, :part2 2713310158}
