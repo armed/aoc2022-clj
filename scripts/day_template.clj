@@ -2,9 +2,12 @@
   (:require
    [util :as u]))
 
+(def day "day_template")
+(def day-test "day_templatetest")
+
 (comment
-  (def input (u/load-input "day_template"))
-  (def test-input (u/load-input "day_templatetest"))
+  (def input (u/load-input day))
+  (def test-input (u/load-input day-test))
   )
 
 (defn parse-input
@@ -24,10 +27,10 @@
 
 (defn run
   []
-  (u/run "day_template" parse-input first-part second-part))
+  (u/run day parse-input first-part second-part))
 
 (comment 
   (time (run))
-  (time (u/run "day_templatetest" parse-input first-part second-part))
+  (time (u/run day-test parse-input first-part second-part))
   nil)
 
