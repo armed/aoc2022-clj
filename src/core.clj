@@ -12,7 +12,8 @@
    [day10]
    [day11]
    [day12]
-   [day13])
+   [day13]
+   [day14])
   (:gen-class))
 
 (defn -main []
@@ -29,20 +30,8 @@
                (future (day10/run))
                (future (day11/run))
                (future (day12/run))
-               (future (day13/run))])))
+               (future (day13/run))
+               (future (day14/run))])))
 
 (comment
   (-main))
-; [{:part1 71924, :part2 210406}
-;  {:part1 9241, :part2 14610}
-;  {:part1 8298, :part2 2708}
-;  {:part1 584, :part2 933}
-;  {:part1 "WSFTMRHPP", :part2 "GSLCMFBRP"}
-;  {:part1 1702, :part2 3559}
-;  {:part1 1517599, :part2 2481982}
-;  {:part1 1849, :part2 201600}
-;  {:part1 6354, :part2 2651}
-;  {:part1 15120, :part2 nil}
-;  {:part1 50616, :part2 11309046332}
-;  {:part1 425, :part2 418}
-;  {:part1 6272, :part2 22288}]
