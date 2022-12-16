@@ -1,6 +1,5 @@
 (ns day14
   (:require
-   [clojure.set :as set]
    [clojure.string :as string]
    [util :as u]))
 
