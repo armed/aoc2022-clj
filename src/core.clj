@@ -13,7 +13,8 @@
    [day11]
    [day12]
    [day13]
-   [day14])
+   [day14]
+   [day15])
   (:gen-class))
 
 (defn -main []
@@ -31,7 +32,9 @@
                (future (day11/run))
                (future (day12/run))
                (future (day13/run))
-               (future (day14/run))])))
+               (future (day14/run))
+               (future (day15/run))
+               ])))
 
 (comment
   (-main))
