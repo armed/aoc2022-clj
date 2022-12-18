@@ -53,18 +53,6 @@
       (not (state [(inc x) y])) (recur (inc x) (inc y))
       :else (conj! state [x (dec y)]))))
 
-(defn show-field
-  [original-state [x-min x-max y-max] state]
-  (let [field (for [y (range 0 (+ 1 y-max))
-                    x (range x-min (+ 1 x-max))]
-                (cond
-                  (original-state [x y]) "#"
-                  (state [x y]) "o"
-                  :else "."))]
-    (->> field
-         (partition-all (inc y-max))
-         (map string/join))))
-
 (defn first-part
   [state]
   (let [y-coords (sort (mapv second state))
@@ -86,7 +74,7 @@
                 (inc cnt)
                 (reduced cnt)))
             0
-            (iterate (partial simulate y-max false) 
+            (iterate (partial simulate y-max false)
                      (transient state)))))
 
 (defn run
